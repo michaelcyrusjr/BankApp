@@ -47,7 +47,7 @@ public class Account {
 
     // Prints the account name to the console
     public void printOwnerName () {
-        System.out.println("\nAccount Name: " + this.ownerName);
+        System.out.println("\nOwner Name: " + this.ownerName);
     }
 
     // Gets the account Number
@@ -101,7 +101,7 @@ public class Account {
 
     // Print current balance in US currency format
     public void printBalance() {
-        System.out.println(NumberFormat.getCurrencyInstance(Locale.US).format(this.accountBalance));
+        System.out.println("Balance: " + NumberFormat.getCurrencyInstance(Locale.US).format(this.accountBalance));
     }
 
     // Return all account info

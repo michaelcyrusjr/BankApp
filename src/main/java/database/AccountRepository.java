@@ -9,13 +9,16 @@ import java.sql.*;
  * @author Michael Cyrus Jr
  **/
 public class AccountRepository {
-    String url = "jdbc:oracle:thin:@//192.168.1.69:1521/FREEPDB1";
-    String user = "BANKAPP";
-    String password = "BANKAPP";
+    private final String url = "jdbc:oracle:thin:@//192.168.1.69:1521/FREEPDB1";
+    private final String user = "BANKAPP";
+    private final String password = "BANKAPP";
+    private final Connection conn = DriverManager.getConnection(url, user, password);
+
+    public AccountRepository() throws SQLException {
+    }
 
     public Account getAccountInfo(int accountNumber) throws SQLException {
         try (
-                Connection conn = DriverManager.getConnection(url, user, password);
                 PreparedStatement pstmt = conn.prepareStatement(
                 """
                 SELECT *
@@ -39,7 +42,6 @@ public class AccountRepository {
 
     public boolean verifyAccountExist(int accountNumber) throws SQLException {
         try (
-                Connection conn = DriverManager.getConnection(url, user, password);
                 PreparedStatement pstmt = conn.prepareStatement(
                 """
                 SELECT *
@@ -60,7 +62,6 @@ public class AccountRepository {
 
     public void printAllAccountDataById(int id) throws SQLException {
         try (
-                Connection conn = DriverManager.getConnection(url, user, password);
                 PreparedStatement pstmt = conn.prepareStatement(
                 """
                 SELECT *
@@ -80,7 +81,6 @@ public class AccountRepository {
 
     public String getOwnerNameById(int id) throws SQLException {
         try (
-                Connection conn = DriverManager.getConnection(url, user, password);
                 PreparedStatement pstmt = conn.prepareStatement(
                 """
                 
