@@ -17,8 +17,8 @@ public class Account {
     private double accountBalance;
 
 
-    public Account(String accountName, int accountNumber, double accountBalance) {
-        this.ownerName = accountName;
+    public Account(String ownerName, int accountNumber, double accountBalance) {
+        this.ownerName = ownerName;
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
     }
@@ -29,15 +29,17 @@ public class Account {
 
 
     // Ask user for account name
-    public String setOwnerName (String ownerName) {
+    public void setOwnerName (String ownerName) {
         this.ownerName = ownerName;
-        return this.ownerName;
     }
 
     // Gets the account name
-    public String getOwnerName (String ownerName) {
-        this.ownerName = ownerName;
+    public String getOwnerName () {
         return this.ownerName;
+    }
+
+    public boolean isValidName(String ownerName) {
+        return ownerName.matches("[a-zA-Z]+");
     }
 
     // Welcomes the user
@@ -53,6 +55,11 @@ public class Account {
     // Gets the account Number
     public int getAccountNumber () {
         return this.accountNumber;
+    }
+
+    // Gets the account Number
+    public void setAccountNumber () {
+        this.accountNumber = ThreadLocalRandom.current().nextInt(10000000, 99999999);
     }
 
     // Print account number
@@ -91,8 +98,6 @@ public class Account {
                     +".");
         }
     }
-
-
 
     // Return current balance
     public double getBalance() {

@@ -17,6 +17,35 @@ public class AccountRepository {
     public AccountRepository() throws SQLException {
     }
 
+    public void createAccount(Account account) throws SQLException {
+        int accountNumber = account.getAccountNumber();
+        String accountOwner = account.getOwnerName();
+
+        try (
+                PreparedStatement pstmt = conn.prepareStatement(
+                        """
+                        INSERT INTO ACCOUNTS (
+                                ACCOUNT_NUMBER,
+                                OWNER_NAME
+                        )
+                        VALUES (
+                                ?,
+                                ?
+                        );
+                        """
+                );
+        ) {
+            pstmt.setInt(1, account.getAccountNumber());
+            pstmt.setString(2, account.getOwnerName());
+            try {
+                ResultSet rs = pstmt.executeQuery();
+                System.out.println("Account was successfully saved");
+            } catch (SQLException e) {
+                System.out.println("Account was not successfully saved.");
+            }
+        }
+    }
+
     public Account getAccountInfo(int accountNumber) throws SQLException {
         try (
                 PreparedStatement pstmt = conn.prepareStatement(
