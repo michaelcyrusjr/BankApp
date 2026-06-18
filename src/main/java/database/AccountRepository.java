@@ -17,7 +17,7 @@ public class AccountRepository {
     public AccountRepository() throws SQLException {
     }
 
-    public void createAccount(Account account) throws SQLException {
+    public void saveAccount(Account account) throws SQLException {
         int accountNumber = account.getAccountNumber();
         String accountOwner = account.getOwnerName();
 

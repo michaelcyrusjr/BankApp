@@ -2,6 +2,8 @@ package accountmanagement;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -15,6 +17,7 @@ public class Account {
     private int accountNumber;
     // Retrieved from database
     private double accountBalance;
+    Scanner scanner = new Scanner(System.in);
 
 
     public Account(String ownerName, int accountNumber, double accountBalance) {
@@ -25,6 +28,49 @@ public class Account {
 
     public Account() {
 
+    }
+
+    // Creates a new account
+    public void createAccount (Account account) {
+        String ownerName;
+        while (true) {
+            System.out.println("Please enter your first name: ");
+            //Setting the account name
+            try {
+                ownerName = scanner.nextLine();
+                if (account.isValidName(ownerName)) {
+                    break;
+                } else {
+                    System.out.println("Invalid entry (No numbers or special characters). Please try again.\n");continue;
+                }
+            } catch (NoSuchElementException ne) {
+                System.out.println("No input entered. Please try again.\n");
+            }
+        }
+
+        // Getting last name
+        while (true) {
+            System.out.println("Please enter your last name: ");
+            //Setting the account name
+            String ownerTemp;
+            try {
+                ownerTemp = scanner.nextLine();
+                if (account.isValidName(ownerTemp)) {
+                    ownerName = ownerName + " " + ownerTemp;
+                    break;
+                } else {
+                    System.out.println("Invalid entry (No numbers or special characters). Please try again.\n");continue;
+                }
+            } catch (NoSuchElementException ne) {
+                System.out.println("No input entered. Please try again.\n");
+            }
+        }
+
+        // Setting the account owner name
+        account.setOwnerName(ownerName);
+
+        // Setting the account number
+        account.setAccountNumber ();
     }
 
 

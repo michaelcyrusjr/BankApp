@@ -16,6 +16,7 @@ class BankApp {
         Scanner scanner = new Scanner(System.in);
         AccountRepository repository = new AccountRepository();
         Account account = new Account();
+
         String accountOwner;
         int accountNumber;
         double accountBalance;
@@ -23,34 +24,24 @@ class BankApp {
         // Greet the client
         System.out.println("\nHello, Welcome to SMARTBank!\n");
 
+        // Create account
+        account.createAccount(account);
 
-        while (true) {
-            System.out.println("Please enter your name: ");
-            //Setting the account name
-            try {
-                accountOwner = scanner.nextLine();
-                if (account.isValidName(accountOwner)) {
-                    break;
-                } else {
-                    System.out.println("Invalid entry (No numbers or special characters). Please try again.\n");continue;
-                }
-            } catch (NoSuchElementException ne) {
-                System.out.println("No input entered. Please try again.\n");
-            }
-        }
+        // Save account in repository
+        repository.saveAccount(account);
 
-            // Setting the account owner name
-            account.setOwnerName(accountOwner);
+        // Account is assigned to the repo data to make sure it's printing from repo
+        account = repository.getAccountInfo(account.getAccountNumber());
 
-            // Setting the account number
-            account.setAccountNumber ();
-            accountNumber = account.getAccountNumber();
-
-            // Setting the account balance
-            accountBalance = 0.0;
+        // Print account info
+        account.printAccountInfo();
 
 
-        repository.createAccount(account);
+
+
+
+
+
 
 
 
@@ -129,3 +120,4 @@ class BankApp {
     }
 
 }
+
