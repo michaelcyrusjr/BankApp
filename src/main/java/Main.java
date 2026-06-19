@@ -14,14 +14,8 @@ import java.util.Scanner;
 class BankApp {
 
     public static void main(String[] args) throws SQLException {
-        Scanner scanner = new Scanner(System.in);
         AccountRepository repository = new AccountRepository();
         Account account = new Account();
-
-        String accountOwner;
-        int accountNumber;
-        double accountBalance;
-
         // Greet the client
         System.out.println("\nHello, Welcome to SMARTBank!\n");
         // Start the prompts

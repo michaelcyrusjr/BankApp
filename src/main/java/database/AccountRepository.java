@@ -166,9 +166,9 @@ public class AccountRepository {
             pstmt.setInt(2, accountId);
             try {
                 pstmt.executeUpdate();
-                System.out.println("\nDeposit successful :)\n");
+                System.out.println("\nAccount update successful :)\n");
             } catch (SQLException e) {
-                System.out.println("\nDeposit unsuccessful :(\n");
+                System.out.println("\nAccount update unsuccessful :(\n");
                 throw new RuntimeException(e);
             }
         }

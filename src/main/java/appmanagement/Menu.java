@@ -28,38 +28,59 @@ public class Menu {
 
             int choice = scanner.nextInt();
             switch (choice) {
-                case 1 -> account.createAccount(account);
-                case 2 -> account.printAccountInfo();
-                case 3 -> {
-                    // Needs to be correctly set up
-                    int amount = 0;
-                    account.withdraw(amount);
+                // Create a new account
+                case 1 -> account.createAccount(account, repository);
+                // View account info
+                case 2 -> {
+                    // Use the account number to assign the current account info to the account object
+                    account = repository.getAccountInfo(getAccountNumber());
+                    // Print all account info
+                    account.printAccountInfo();
                 }
+                // Withdraw from account
+                case 3 -> {
+                    // Use the account number to assign the current account info to the account object
+                    account = repository.getAccountInfo(getAccountNumber());
+                    // Attempt to withdraw money from the account
+                    account.withdraw(repository, account);
+                }
+                // Deposit into account
                 case 4 -> {
-                    int accountNumber = 0;
-                    while (true){
-                        System.out.println("Enter your account number: \n");
-
-                        if (scanner.hasNextInt()) {
-                            accountNumber = scanner.nextInt();
-                            if (accountNumber > 0) {
-                                break;
-                            } else {
-                                System.out.println("Account number must be positive.\n");
-                            }
-                        } else {
-                            System.out.println("Input must be a positive number.\n");
-                            scanner.next();
-                        }
-                    }
-                    account = repository.getAccountInfo(accountNumber);
+                    // Use the account number to assign the current account info to the account object
+                    account = repository.getAccountInfo(getAccountNumber());
+                    // Attempt to deposit money into the account
                     account.deposit(repository, account);
                 }
+                // Exit app
                 case 5 -> {
                     System.out.println("Thank you for banking with us!");
                     return;
                 }
             }
         }
+    }
+
+    public static int getAccountNumber() {
+        int accountNumber = 0;
+        while (true) {
+            System.out.println("Enter your account number: \n");
+            // verify the user enters a valid account number
+            if (scanner.hasNextInt()) {
+                // If this is a valid int assign to the account number variable
+                accountNumber = scanner.nextInt();
+                // If the account number is greater than 0 break the loop
+                if (accountNumber > 0) {
+                    break;
+                    // If the number is less than 0 continue the loop
+                } else {
+                    System.out.println("Account number must be positive.\n");
+                }
+            } else {
+                // If the input is not a valid positive int
+                System.out.println("Input must be a positive number.\n");
+                scanner.next();
+            }
+        }
+        return accountNumber;
     }
 }
