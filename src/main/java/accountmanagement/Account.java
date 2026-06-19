@@ -1,5 +1,8 @@
 package accountmanagement;
 
+import database.AccountRepository;
+
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -11,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Michael Cyrus Jr
  **/
 public class Account {
+    private int accountId = 0;
     // Retrieved from database
     private String ownerName;
     // Input from user and then verified in database
@@ -18,16 +22,29 @@ public class Account {
     // Retrieved from database
     private double accountBalance;
     Scanner scanner = new Scanner(System.in);
+    AccountRepository repository = new AccountRepository();
 
 
-    public Account(String ownerName, int accountNumber, double accountBalance) {
+    public Account(String ownerName, int accountNumber, double accountBalance) throws SQLException {
         this.ownerName = ownerName;
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
     }
 
-    public Account() {
+    public Account(int accountId, String ownerName, int accountNumber, double accountBalance) throws SQLException {
+        this.accountId = accountId;
+        this.ownerName = ownerName;
+        this.accountNumber = accountNumber;
+        this.accountBalance = accountBalance;
+    }
 
+    public Account() throws SQLException {
+
+    }
+
+    // Get the account ID
+    public int getAccountId() {
+        return this.accountId;
     }
 
     // Creates a new account
@@ -114,7 +131,20 @@ public class Account {
     }
 
     // Adds to the account balance
-    public double deposit(double depositAmount) {
+    public double deposit(AccountRepository repository, Account account) throws SQLException {
+        System.out.println("Please enter a deposit amount: ");
+
+        double depositAmount = scanner.nextDouble();
+
+        double currentBalance = account.getBalance();
+
+        currentBalance = currentBalance + depositAmount;
+
+        repository.updateRepoBalance(currentBalance, account);
+
+
+
+
         this.accountBalance = this.accountBalance + depositAmount;
         System.out.println("\nThank you for your " + NumberFormat.getCurrencyInstance().format(depositAmount) + " deposit!\n");
         return this.accountBalance;

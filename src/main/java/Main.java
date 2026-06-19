@@ -1,4 +1,5 @@
 import accountmanagement.Account;
+import appmanagement.Menu;
 import database.AccountRepository;
 
 import java.sql.SQLException;
@@ -23,18 +24,9 @@ class BankApp {
 
         // Greet the client
         System.out.println("\nHello, Welcome to SMARTBank!\n");
-
-        // Create account
-        account.createAccount(account);
-
-        // Save account in repository
-        repository.saveAccount(account);
-
-        // Account is assigned to the repo data to make sure it's printing from repo
-        account = repository.getAccountInfo(account.getAccountNumber());
-
-        // Print account info
-        account.printAccountInfo();
+        // Start the prompts
+        Menu.startBankApp(account, repository);
+    }
 
 
 
@@ -117,7 +109,6 @@ class BankApp {
 //        }
 //
 //        account.printAccountInfo();
-    }
 
 }
 
