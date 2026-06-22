@@ -17,32 +17,35 @@ public class AccountRepository {
     public AccountRepository() throws SQLException {
     }
 
-
     public void saveNewAccount(Account account) throws SQLException {
         int accountNumber = account.getAccountNumber();
-        String accountOwner = account.getOwnerName();
+        String ownerFirstName = account.getOwnerFirstName();
+        String ownerLastName = account.getOwnerLastName();
 
         try (
                 PreparedStatement pstmt = conn.prepareStatement(
                         """
                         INSERT INTO ACCOUNTS (
                                 ACCOUNT_NUMBER,
-                                OWNER_NAME
+                                FIRST_NAME,
+                                LAST_NAME
                         )
                         VALUES (
+                                ?,
                                 ?,
                                 ?
                         );
                         """
                 );
         ) {
-            pstmt.setInt(1, account.getAccountNumber());
-            pstmt.setString(2, account.getOwnerName());
+            pstmt.setInt(1, accountNumber);
+            pstmt.setString(2, ownerFirstName);
+            pstmt.setString(3, ownerLastName);
             try {
                 pstmt.executeUpdate();
-                System.out.println("Account was successfully saved");
+                System.out.println("Account created successfully ;)");
             } catch (SQLException e) {
-                System.out.println("Account was not successfully saved.");
+                System.out.println("Unable to create account :(");
             }
         }
     }
@@ -61,7 +64,9 @@ public class AccountRepository {
                 if (rs.next()) {
                     return new Account(
                             rs.getInt("ACCOUNT_ID"),
-                            rs.getString("OWNER_NAME"),
+                            rs.getString("FULL_NAME"),
+                            rs.getString("FIRST_NAME"),
+                            rs.getString("LAST_NAME"),
                             rs.getInt("ACCOUNT_NUMBER"),
                             rs.getDouble("BALANCE")
                     );
@@ -131,7 +136,6 @@ public class AccountRepository {
         }
         return null;
     }
-
 
     public double getRepoBalance (Account account) throws SQLException {
         Double balance = 0.0;

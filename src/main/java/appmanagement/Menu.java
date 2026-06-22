@@ -27,7 +27,7 @@ public class Menu {
                 """);
 
             int choice = scanner.nextInt();
-            switch (choice) {
+            switch (choice) { // Create a new account
                 // Create a new account
                 case 1 -> account.createAccount(account, repository);
                 // View account info

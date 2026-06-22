@@ -2,6 +2,7 @@ package accountmanagement;
 
 import database.AccountRepository;
 
+import javax.naming.Name;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -9,101 +10,112 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 /**
  * @author Michael Cyrus Jr
  **/
 public class Account {
     // Retrieved from database
     private int accountId = 0;
-    // Retrieved from database
-    private String ownerName;
     // Input from user and then verified in database
     private int accountNumber;
+    // Retrieved from database
+    private String ownerFirstName;
+    private String ownerLastName;
+    private String ownerFullName;
     // Retrieved from database
     private double accountBalance;
     Scanner scanner = new Scanner(System.in);
     AccountRepository repository = new AccountRepository();
 
-    public Account(String ownerName, int accountNumber, double accountBalance) throws SQLException {
-        this.ownerName = ownerName;
-        this.accountNumber = accountNumber;
-        this.accountBalance = accountBalance;
-    }
-
-    public Account(int accountId, String ownerName, int accountNumber, double accountBalance) throws SQLException {
-        this.accountId = accountId;
-        this.ownerName = ownerName;
-        this.accountNumber = accountNumber;
-        this.accountBalance = accountBalance;
-    }
-
+    //Constructors
     public Account() throws SQLException {
 
     }
+    public Account(String ownerName, int accountNumber, double accountBalance) throws SQLException {
+        this.ownerFullName = ownerName;
+        this.accountNumber = accountNumber;
+        this.accountBalance = accountBalance;
+    }
+    public Account(int accountId, String ownerName, int accountNumber, double accountBalance) throws SQLException {
+        this.accountId = accountId;
+        this.ownerFullName = ownerName;
+        this.accountNumber = accountNumber;
+        this.accountBalance = accountBalance;
+    }
+    public Account(int accountId, String ownerFullName, String ownerFirstName, String ownerLastName, int accountNumber, double accountBalance) throws SQLException{
+        this.accountId = accountId;
+        this.ownerFullName = ownerFullName;
+        this.ownerFirstName = ownerFirstName;
+        this.ownerLastName = ownerLastName;
+        this.accountNumber = accountNumber;
+        this.accountBalance = accountBalance;
+    }
 
-    // Get the account ID
+    // Getters
     public int getAccountId() {
         return this.accountId;
     }
-
-    // Ask user for account name
-    public void setOwnerName (String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    // Gets the account name
-    public String getOwnerName () {
-        return this.ownerName;
-    }
-
-    // Prints the account name to the console
-    public void printOwnerName () {
-        System.out.println("\nOwner Name: " + this.ownerName);
-    }
-
-    // Gets the account Number
     public int getAccountNumber () {
         return this.accountNumber;
     }
-
-    // Gets the account Number
-    public void setAccountNumber () {
-        this.accountNumber = ThreadLocalRandom.current().nextInt(10000000, 99999999);
+    public String getOwnerFullName () {
+        return this.ownerFullName;
     }
-
-    // Print account number
-    public void printAccountNumber () {
-        System.out.println("Account Number: " + this.accountNumber);
+    public String getOwnerFirstName () {
+        return this.ownerFirstName;
     }
-
-    // Return current balance
-    public double getBalance() {
+    public String getOwnerLastName() {
+        return this.ownerLastName;
+    }
+    public double getAccountBalance() {
         return accountBalance;
     }
 
-    // Print current balance in US currency format
-    public void printBalance() {
-        System.out.println("Balance: " + NumberFormat.getCurrencyInstance(Locale.US).format(this.accountBalance));
+    // Setters
+    public void setAccountNumber () {
+        this.accountNumber = ThreadLocalRandom.current().nextInt(10000000, 99999999);
+    }
+    public void setOwnerFullName () {
+        this.ownerFullName = (ownerFirstName + " " + ownerLastName);
+    }
+    public void setOwnerFirstName (String ownerFirstName) {
+        this.ownerFirstName = ownerFirstName;
+    }
+    public void setOwnerLastName (String ownerLastName) {
+        this.ownerLastName = ownerLastName;
+    }
+    public void setAccountBalance (Double accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
-    // Return all account info
+    // Printers
+    public void printAccountNumber () {
+        System.out.println("Account Number: " + this.accountNumber);
+    }
+    public void printOwnerFullName () {
+        System.out.println("\nOwner Name: " + this.ownerFullName);
+    }
+    public void printAccountBalance() {
+        System.out.println("Balance: " + NumberFormat.getCurrencyInstance(Locale.US).format(this.accountBalance));
+    }
     public void printAccountInfo (){
-        printOwnerName();
+        printOwnerFullName();
         printAccountNumber();
-        printBalance();
+        printAccountBalance();
         System.out.println("\n");
     }
 
-    // Creates a new account
+    // Business
     public void createAccount (Account account, AccountRepository repository) throws SQLException {
-        String ownerName;
+        String ownerFirstName;
+        String ownerLastName;
+        String ownerFullName;
         while (true) {
             System.out.println("Please enter your first name: ");
             //Setting the account name
             try {
-                ownerName = scanner.nextLine();
-                if (account.isValidName(ownerName)) {
+                ownerFirstName = scanner.nextLine();
+                if (account.isValidName(ownerFirstName)) {
                     break;
                 } else {
                     System.out.println("Invalid entry (No numbers or special characters). Please try again.\n");continue;
@@ -116,11 +128,9 @@ public class Account {
         while (true) {
             System.out.println("Please enter your last name: ");
             //Setting the account name
-            String ownerTemp;
             try {
-                ownerTemp = scanner.nextLine();
-                if (account.isValidName(ownerTemp)) {
-                    ownerName = ownerName + " " + ownerTemp;
+                ownerLastName = scanner.nextLine();
+                if (account.isValidName(ownerLastName)) {
                     break;
                 } else {
                     System.out.println("Invalid entry (No numbers or special characters). Please try again.\n");continue;
@@ -130,19 +140,19 @@ public class Account {
             }
         }
         // Setting the account owner name
-        account.setOwnerName(ownerName);
+        account.setOwnerFirstName(ownerFirstName);
+        account.setOwnerLastName(ownerLastName);
+        account.setOwnerFullName();
         // Setting the account number
         account.setAccountNumber ();
         repository.saveNewAccount(account);
     }
-
-    // Adds to the account repo balance
     public void deposit(AccountRepository repository, Account account) throws SQLException {
         System.out.println("Please enter a deposit amount: ");
         // User enters deposit amount
         double depositAmount = scanner.nextDouble();
         // Get the current balance
-        double currentBalance = account.getBalance();
+        double currentBalance = account.getAccountBalance();
         // Add deposit to current balance
         currentBalance = currentBalance + depositAmount;
         // Attempt to save new balance to repo
@@ -152,14 +162,12 @@ public class Account {
         System.out.println("\nThank you for your " + NumberFormat.getCurrencyInstance().format(depositAmount) + " deposit!\n");
         System.out.println("\nYou're current balance is now: " + NumberFormat.getCurrencyInstance().format(this.accountBalance) + "\n");
     }
-
-    // Subtracts from the account repo balance
     public void withdraw(AccountRepository repository, Account account) throws SQLException {
-        System.out.println("Please enter a withdraw amount: ");
+        System.out.println("Please enter a withdrawal amount: ");
         // User enters withdraw amount
         double withdrawAmount = scanner.nextDouble();
         // Get the current balance
-        double currentBalance = account.getBalance();
+        double currentBalance = account.getAccountBalance();
         // Subtract withdraw amount to current balance
         currentBalance = currentBalance - withdrawAmount;
         // Print message if withdraw is more than avaialve balance
@@ -167,10 +175,11 @@ public class Account {
             System.out.print("WITHDRAW REJECTED: Your withdraw amount of "
                     +NumberFormat.getCurrencyInstance(Locale.US).format(withdrawAmount)
                     +" is greater than your current balance of "
-                    +NumberFormat.getCurrencyInstance(Locale.US).format(account.getBalance())
+                    +NumberFormat.getCurrencyInstance(Locale.US).format(account.getAccountBalance())
                     +".\n");
         } else {
             // Update repo and thank client if withdraw is successful
+            int accountNumber = account.getAccountNumber();
             repository.updateRepoBalance(currentBalance, account);
             this.accountBalance = currentBalance;
             System.out.println("\nThank you for your " + NumberFormat.getCurrencyInstance().format(withdrawAmount) + " withdraw!\n");
@@ -178,7 +187,7 @@ public class Account {
         }
     }
 
-    // Checks if String is a valid name
+    // Validation
     public boolean isValidName(String ownerName) {
         return ownerName.matches("[a-zA-Z]+");
     }
