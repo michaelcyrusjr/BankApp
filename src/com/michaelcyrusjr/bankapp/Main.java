@@ -1,17 +1,16 @@
-import accountmanagement.Account;
-import appmanagement.Menu;
-import database.AccountRepository;
+package com.michaelcyrusjr.bankapp;
+
+import com.michaelcyrusjr.bankapp.model.Account;
+import com.michaelcyrusjr.bankapp.ui.Menu;
+import com.michaelcyrusjr.bankapp.repository.AccountRepository;
 
 import java.sql.SQLException;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
  * @author Michael Cyrus Jr
  **/ //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-class BankApp {
+class Main {
 
     public static void main(String[] args) throws SQLException {
         AccountRepository repository = new AccountRepository();

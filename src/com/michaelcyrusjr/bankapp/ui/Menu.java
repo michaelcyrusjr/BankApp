@@ -1,12 +1,10 @@
-package appmanagement;
+package com.michaelcyrusjr.bankapp.ui;
 
-import accountmanagement.Account;
-import database.AccountRepository;
+import com.michaelcyrusjr.bankapp.model.Account;
+import com.michaelcyrusjr.bankapp.repository.AccountRepository;
 
 import java.sql.SQLException;
 import java.util.Scanner;
-
-import static java.lang.System.exit;
 
 /**
  * @author Michael Cyrus Jr
@@ -39,17 +37,33 @@ public class Menu {
                 }
                 // Withdraw from account
                 case 3 -> {
-                    // Use the account number to assign the current account info to the account object
-                    account = repository.getAccountInfo(getAccountNumber());
-                    // Attempt to withdraw money from the account
-                    account.withdraw(repository, account);
+                    while (true) {
+                        // Use the account number to assign the current account info to the account object
+                        account = repository.getAccountInfo(getAccountNumber());
+                        // Attempt to withdraw money from the account
+                        try {
+                            account.withdraw(repository, account);
+                            break;
+                        } catch (NullPointerException npe) {
+                            System.out.println("\nInvalid account number. Please try again.\n");
+                        }
+                    }
+
                 }
                 // Deposit into account
                 case 4 -> {
+                    while (true) {
                     // Use the account number to assign the current account info to the account object
                     account = repository.getAccountInfo(getAccountNumber());
                     // Attempt to deposit money into the account
-                    account.deposit(repository, account);
+
+                        try {
+                            account.deposit(repository, account);
+                            break;
+                        } catch (NullPointerException npe) {
+                            System.out.print("\nInvalid account number. Please try again.\n");
+                        }
+                    }
                 }
                 // Exit app
                 case 5 -> {
@@ -63,7 +77,7 @@ public class Menu {
     public static int getAccountNumber() {
         int accountNumber = 0;
         while (true) {
-            System.out.println("Enter your account number: \n");
+            System.out.println("\nEnter your account number: \n");
             // verify the user enters a valid account number
             if (scanner.hasNextInt()) {
                 // If this is a valid int assign to the account number variable

@@ -1,15 +1,14 @@
-package database;
+package com.michaelcyrusjr.bankapp.repository;
 
-import accountmanagement.Account;
+import com.michaelcyrusjr.bankapp.model.Account;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 
 /**
  * @author Michael Cyrus Jr
  **/
 public class AccountRepository {
-    private final String url = "jdbc:oracle:thin:@//192.168.1.69:1521/FREEPDB1";
+    private final String url = "jdbc:oracle:thin:@//localhost:1521/FREEPDB1";
     private final String user = "BANKAPP";
     private final String password = "BANKAPP";
     private final Connection conn = DriverManager.getConnection(url, user, password);
@@ -54,21 +53,34 @@ public class AccountRepository {
         try (
                 PreparedStatement pstmt = conn.prepareStatement(
                 """
-                SELECT *
-                FROM ACCOUNTS
-                WHERE ACCOUNT_NUMBER = ?
+                SELECT 
+                    A.ACCOUNT_ID,
+                    C.CUSTOMER_ID,
+                    C.FULL_NAME,
+                    C.FIRST_NAME,
+                    C.LAST_NAME,
+                    C.EMAIL_ADDRESS,
+                    A.ACCOUNT_NUMBER,
+                    A.BALANCE
+                FROM CUSTOMERS C
+                INNER JOIN ACCOUNTS A
+                ON C.CUSTOMER_ID = A.CUSTOMER_ID
+                WHERE C.EMAIL_ADDRESS = ?
                 """);
         ) {
             pstmt.setInt(1, accountNumber);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+                    // Need to create the constructor
                     return new Account(
-                            rs.getInt("ACCOUNT_ID"),
-                            rs.getString("FULL_NAME"),
-                            rs.getString("FIRST_NAME"),
-                            rs.getString("LAST_NAME"),
-                            rs.getInt("ACCOUNT_NUMBER"),
-                            rs.getDouble("BALANCE")
+                            rs.getInt("A.ACCOUNT_ID"),
+                            rs.getInt("C.CUSTOMER_ID"),
+                            rs.getString("C.FULL_NAME"),
+                            rs.getString("C.FIRST_NAME"),
+                            rs.getString("C.LAST_NAME"),
+                            rs.getString("C.EMAIL_ADDRESS"),
+                            rs.getInt("A.ACCOUNT_NUMBER"),
+                            rs.getDouble("A.BALANCE")
                     );
                 }
             }

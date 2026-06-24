@@ -1,8 +1,7 @@
-package accountmanagement;
+package com.michaelcyrusjr.bankapp.model;
 
-import database.AccountRepository;
+import com.michaelcyrusjr.bankapp.repository.AccountRepository;
 
-import javax.naming.Name;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
