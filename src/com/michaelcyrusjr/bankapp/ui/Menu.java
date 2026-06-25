@@ -1,10 +1,15 @@
 package com.michaelcyrusjr.bankapp.ui;
 
 import com.michaelcyrusjr.bankapp.model.Account;
+import com.michaelcyrusjr.bankapp.model.Customer;
 import com.michaelcyrusjr.bankapp.repository.AccountRepository;
+import com.michaelcyrusjr.bankapp.util.InputValidator;
 
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * @author Michael Cyrus Jr
@@ -12,17 +17,17 @@ import java.util.Scanner;
 public class Menu {
     static Scanner scanner = new Scanner(System.in);
 
-    public static void startBankApp (Account account, AccountRepository repository) throws SQLException {
+    public static void startBankApp(Account account, AccountRepository repository) throws SQLException {
         while (true) {
             System.out.println("\nPLEASE SELECT A MENU OPTION:\n");
             System.out.println("""
-                Menu
-                1. Create an account
-                2. View your account
-                3. Withdraw from your account
-                4. Deposit into your account
-                5. Exit
-                """);
+                    Menu
+                    1. Create an account
+                    2. View your account
+                    3. Withdraw from your account
+                    4. Deposit into your account
+                    5. Exit
+                    """);
 
             int choice = scanner.nextInt();
             switch (choice) { // Create a new account
@@ -53,9 +58,9 @@ public class Menu {
                 // Deposit into account
                 case 4 -> {
                     while (true) {
-                    // Use the account number to assign the current account info to the account object
-                    account = repository.getAccountInfo(getAccountNumber());
-                    // Attempt to deposit money into the account
+                        // Use the account number to assign the current account info to the account object
+                        account = repository.getAccountInfo(getAccountNumber());
+                        // Attempt to deposit money into the account
 
                         try {
                             account.deposit(repository, account);
@@ -96,5 +101,49 @@ public class Menu {
             }
         }
         return accountNumber;
+    }
+
+    public void createAccount(Customer customer, Account account) {
+        String firstName;
+        String lastName;
+        String emailAddress;
+        String password;
+
+            firstName = promptForFirstName();
+
+
+
+
+    }
+
+    public String promptForFirstName() {
+        String name;
+        while (true) {
+            System.out.println("\nPlease enter your first name: ");
+
+            name = scanner.nextLine();
+
+            if (InputValidator.isValidName(name)) {
+                return name;
+            } else {
+                System.out.println("\nInput must be a valid name.");
+            }
+        }
+    }
+
+    public void printAccountNumber() {
+        System.out.println("Account Number: " + this.accountNumber);
+    }
+    public void printOwnerFullName() {
+        System.out.println("\nOwner Name: " + this.ownerFullName);
+    }
+    public void printAccountBalance() {
+        System.out.println("Balance: " + NumberFormat.getCurrencyInstance(Locale.US).format(this.accountBalance));
+    }
+    public void printAccountInfo () {
+        printOwnerFullName();
+        printAccountNumber();
+        printAccountBalance();
+        System.out.println("\n");
     }
 }
