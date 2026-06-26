@@ -110,6 +110,9 @@ public class Menu {
         String password;
 
             firstName = promptForFirstName();
+            lastName = promptForLastName();
+            emailAddress = promptForEmail();
+            password = promptForPassword();
 
 
 
@@ -117,16 +120,58 @@ public class Menu {
     }
 
     public String promptForFirstName() {
-        String name;
+        String firstName;
         while (true) {
             System.out.println("\nPlease enter your first name: ");
 
-            name = scanner.nextLine();
+            firstName = scanner.nextLine();
 
-            if (InputValidator.isValidName(name)) {
-                return name;
+            if (InputValidator.isValidName(firstName)) {
+                return firstName;
             } else {
                 System.out.println("\nInput must be a valid name.");
+            }
+        }
+    }
+    public String promptForLastName() {
+        String lastName;
+        while (true) {
+            System.out.println("\nPlease enter your last name: ");
+
+            lastName = scanner.nextLine();
+
+            if (InputValidator.isValidName(lastName)) {
+                return lastName;
+            } else {
+                System.out.println("\nInput must be a valid name.");
+            }
+        }
+    }
+    public String promptForEmail() {
+        String email;
+        while (true) {
+            System.out.println("\nPlease enter your email address: ");
+
+            email = scanner.nextLine();
+
+            if (InputValidator.isValidEmail(email)) {
+                return email;
+            } else {
+                System.out.println("\nInput must be a valid email.");
+            }
+        }
+    }
+    public String promptForPassword() {
+        String password;
+        while (true) {
+            System.out.println("\nPlease enter your password: ");
+
+            password = scanner.nextLine();
+
+            if (InputValidator.isValidPassword(password)) {
+                return password;
+            } else {
+                System.out.println("\nInput must be a valid password.");
             }
         }
     }
