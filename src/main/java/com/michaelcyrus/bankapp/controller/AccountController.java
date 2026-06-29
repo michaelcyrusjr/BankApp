@@ -1,10 +1,11 @@
 package com.michaelcyrus.bankapp.controller;
 
+import com.michaelcyrus.bankapp.dto.CreateAccountRequest;
+import com.michaelcyrus.bankapp.dto.CreateCustomerRequest;
 import com.michaelcyrus.bankapp.entity.Account;
 import com.michaelcyrus.bankapp.service.AccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.michaelcyrus.bankapp.service.CustomerService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class AccountController {
     @GetMapping
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
+    }
+
+    @PostMapping
+    public Account createAccount (@RequestBody CreateAccountRequest request) {
+            return accountService.createAccount(request);
     }
 
 }
