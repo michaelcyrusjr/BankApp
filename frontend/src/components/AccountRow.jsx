@@ -1,11 +1,11 @@
 import { CListGroupItem } from '@coreui/react'
 
-const AccountRow = ({ name, number, balance }) => {
+const AccountRow = ({ accountNumber, balance }) => {
   return (
     <CListGroupItem className="d-flex justify-content-between align-items-center py-3">
       <div>
-        <div className="fw-semibold">{name}</div>
-        <div className="fw-semibold">{number}</div>
+        <div className="fw-semibold">Account</div>
+        <div className="fw-semibold">{accountNumber}</div>
       </div>
       <div className="fw-semibold">{balance}</div>
     </CListGroupItem>

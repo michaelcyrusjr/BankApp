@@ -12,13 +12,33 @@ import {
 import SummaryCard from '../../components/SummaryCard'
 import AccountRow from '../../components/AccountRow'
 import TransactionRow from '../../components/TransactionRow'
+import { useEffect, useState } from 'react'
+import { getAccounts } from '../../api/accountsApi'
 
 const Dashboard = () => {
-  const accounts = [
-    { name: 'Checking Account', number: '**** 1234', balance: '$12,540.00' },
-    { name: 'Savings Account', number: '**** 5678', balance: '$10,250.00' },
-    { name: 'Credit Card', number: '**** 9012', balance: '-1,250.00' },
-  ]
+  const [accounts, setAccounts] = useState([])
+  const [loading, setLoading] = useState(true)
+  console.log('render accounts:', accounts)
+
+  useEffect(() => {
+    const loadAccounts = async () => {
+      try {
+        const data = await getAccounts()
+        console.log('fetched accounts:', data)
+        setAccounts(data)
+      } catch (error) {
+        console.error('Failed to load accounts:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadAccounts()
+  }, [])
+
+  useEffect(() => {
+    console.log('accounts changed:', accounts)
+  }, [accounts])
 
   const transactions = [
     { name: 'Salary Deposit', date: 'May 24, 2026', amount: '+$3,200.00' },
@@ -76,9 +96,8 @@ const Dashboard = () => {
               <CListGroup flush>
                 {accounts.map((account) => (
                   <AccountRow
-                    key={account.number}
-                    name={account.name}
-                    number={account.number}
+                    key={account.id}
+                    accountNumber={account.accountNumber}
                     balance={account.balance}
                   />
                 ))}
