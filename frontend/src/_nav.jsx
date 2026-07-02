@@ -16,6 +16,7 @@ import {
   cilBell,
   cilCalculator,
   cilChartPie,
+  cilCreditCard,
   cilCursor,
   cilDescription,
   cilDrop,
@@ -84,6 +85,12 @@ const _nav = [
       color: 'info',
       text: 'NEW',
     },
+  },
+  {
+    component: CNavItem,
+    name: 'Accounts',
+    to: '/accounts',
+    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
