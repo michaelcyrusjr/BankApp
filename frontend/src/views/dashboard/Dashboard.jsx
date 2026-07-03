@@ -9,6 +9,15 @@ import {
   CRow,
 } from '@coreui/react'
 
+import CIcon from '@coreui/icons-react'
+import {
+  cilSwapHorizontal,
+  cilDollar,
+  cilCloudUpload,
+  cilDescription,
+  cilCreditCard,
+} from '@coreui/icons'
+
 import SummaryCard from '../../components/SummaryCard'
 import AccountRow from '../../components/AccountRow'
 import TransactionRow from '../../components/TransactionRow'
@@ -40,74 +49,128 @@ const Dashboard = () => {
     console.log('accounts changed:', accounts)
   }, [accounts])
 
+  const totalBalance = '$64,046.00'
+  const totalAccounts = accounts.length
+  const totalIncome = '$4,850'
+  const totalExpenses = '$2,310.00'
+  const recentActivity = '5'
+
+  const summaryCard = [
+    {
+      label: 'Total Balance',
+      icon: cilSwapHorizontal,
+      color: 'success',
+      value: totalBalance,
+    },
+    {
+      label: 'Total Accounts',
+      icon: cilDollar,
+      color: 'info',
+      value: totalAccounts,
+    },
+    {
+      label: 'Total Income',
+      icon: cilCloudUpload,
+      color: 'primary',
+      value: totalIncome,
+    },
+    {
+      label: 'Total Expenses',
+      icon: cilDescription,
+      color: 'warning',
+      value: totalExpenses,
+    },
+  ]
+
   const transactions = [
     { name: 'Salary Deposit', date: 'May 24, 2026', amount: '+$3,200.00' },
     { name: 'Electric Bill', date: 'May 22, 2026', amount: '-120.00' },
     { name: 'Groceries', date: 'May 21, 2026', amount: '-$86.44' },
   ]
 
-  const totalBalance = '$27,540.00'
-  const totalAccounts = accounts.length
-  const totalIncome = '$4,850'
-  const totalExpenses = '$2,310.00'
-  const recentActivity = '5'
+  const quickActions = [
+    {
+      label: 'Transfer Money',
+      icon: cilSwapHorizontal,
+      color: 'success',
+    },
+    {
+      label: 'Pay Bills',
+      icon: cilDollar,
+      color: 'info',
+    },
+    {
+      label: 'Deposit Check',
+      icon: cilCloudUpload,
+      color: 'primary',
+    },
+    {
+      label: 'View Statements',
+      icon: cilDescription,
+      color: 'warning',
+    },
+  ]
 
   return (
     <>
       <CRow className="mb-4">
         <CCol xs={12}>
           <h1 className="mb-1">Welcome back, Michael!</h1>
-          <p className="text-medium-emphasis mb-0">Here is an overview of your accounts today.</p>
+          <p className="text-medium-emphasis mb-0">Here's an overview of your accounts today.</p>
         </CCol>
       </CRow>
 
       <CRow className="g-4 mb-4">
-        <CCol md={2}>
-          <SummaryCard title="Total Balance" value={totalBalance} />
-        </CCol>
-
-        <CCol md={2}>
-          <SummaryCard title="Total Accounts" value={totalAccounts} />
-        </CCol>
-
-        <CCol md={2}>
-          <SummaryCard title="Total Income" value={totalIncome} />
-        </CCol>
-
-        <CCol md={2}>
-          <SummaryCard title="Total Expenses" value={totalExpenses} />
-        </CCol>
-
-        <CCol md={2}>
-          <SummaryCard title="Recent Activity" value={recentActivity} />
-        </CCol>
+        {summaryCard.map((card) => (
+          <CCol xs={12} sm={6} md={3} key={card.label}>
+            <SummaryCard
+              title={card.label}
+              value={card.value}
+              icon={card.icon}
+              color={card.color}
+            />
+          </CCol>
+        ))}
       </CRow>
 
       <CRow className="g-4">
-        <CCol lg={7}>
-          <CCard>
+        <CCol lg={6}>
+          <CCard className="dashboard-list-card">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong>Accounts Overview</strong>
               <CButton color="primary" size="sm">
                 Transfer Money
               </CButton>
             </CCardHeader>
+
             <CCardBody>
-              <CListGroup flush>
+              <div className="accountsrow-grid">
                 {accounts.map((account) => (
-                  <AccountRow
+                  <CButton
                     key={account.id}
-                    accountNumber={account.accountNumber}
-                    balance={account.balance}
-                  />
+                    color="dark"
+                    variant="outline"
+                    className="accountsrow-button"
+                  >
+                    <span className={`accountsrow-icon text-${account.color || 'primary'}`}>
+                      <CIcon icon={account.icon || cilCreditCard} size="lg" />
+                    </span>
+
+                    <span className="accountsrow-info">
+                      <span className="accountsrow-label">Account</span>
+                      <span className="accountsrow-number">{account.accountNumber}</span>
+                    </span>
+
+                    <span className="accountsrow-balance">{account.balance}</span>
+                  </CButton>
                 ))}
-              </CListGroup>
+              </div>
             </CCardBody>
           </CCard>
         </CCol>
 
-        <CCol lg={5}>
-          <CCard>
+        <CCol lg={6}>
+          <CCard className="dashboard-list-card">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong>Recent Transactions</strong>
               <CButton color="link" size="sm" className="text-decoration-none p-0">
@@ -130,14 +193,26 @@ const Dashboard = () => {
         </CCol>
 
         <CCol xs={12}>
-          <CCard className="mt-4">
-            <CCardHeader>
-              <strong>Quick Actions</strong>
-            </CCardHeader>
-            <CCardBody className="d-flex gap-2 flex-wrap">
-              <CButton color="primary">Transfer Money</CButton>
-              <CButton color="secondary">Deposit</CButton>
-              <CButton color="secondary">Withdraw</CButton>
+          <CCard className="mt-1 quick-actions-card">
+            <CCardBody>
+              <strong className="quick-actions-title">Quick Actions</strong>
+
+              <div className="quick-actions-grid">
+                {quickActions.map((action) => (
+                  <CButton
+                    key={action.label}
+                    color={action.color}
+                    variant="outline"
+                    className="quick-action-button"
+                  >
+                    <span className={`quick-action-icon text-${action.color}`}>
+                      <CIcon icon={action.icon} size="lg" />
+                    </span>
+
+                    <span>{action.label}</span>
+                  </CButton>
+                ))}
+              </div>
             </CCardBody>
           </CCard>
         </CCol>
