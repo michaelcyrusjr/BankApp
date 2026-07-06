@@ -1,5 +1,8 @@
 package com.michaelcyrus.bankapp.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,19 +10,14 @@ import java.math.BigDecimal;
  **/
 public class CreateAccountRequest {
 
-    private String accountNumber;
+    @NotNull
+    @PositiveOrZero
     private BigDecimal balance;
+
+    @NotNull
     private Long customerId;
 
     public CreateAccountRequest() {
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
     }
 
     public BigDecimal getBalance() {
@@ -37,5 +35,4 @@ public class CreateAccountRequest {
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
-
 }

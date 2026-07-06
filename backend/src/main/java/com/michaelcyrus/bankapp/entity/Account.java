@@ -1,6 +1,8 @@
 package com.michaelcyrus.bankapp.entity;
 
+import com.michaelcyrus.bankapp.dto.CustomerResponse;
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.math.BigDecimal;
 
@@ -29,6 +31,13 @@ public class Account {
     }
 
     public Account(String accountNumber, BigDecimal balance, Customer customer) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.customer = customer;
+    }
+
+    public Account(Long id, String accountNumber, BigDecimal balance, Customer customer) {
+        this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.customer = customer;

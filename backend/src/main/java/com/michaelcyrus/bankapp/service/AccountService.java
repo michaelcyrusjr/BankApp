@@ -1,6 +1,8 @@
 package com.michaelcyrus.bankapp.service;
 
+import com.michaelcyrus.bankapp.dto.AccountResponse;
 import com.michaelcyrus.bankapp.dto.CreateAccountRequest;
+import com.michaelcyrus.bankapp.dto.CustomerResponse;
 import com.michaelcyrus.bankapp.entity.Account;
 import com.michaelcyrus.bankapp.entity.Customer;
 import com.michaelcyrus.bankapp.repository.AccountRepository;
@@ -8,6 +10,7 @@ import com.michaelcyrus.bankapp.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Michael Cyrus Jr
@@ -23,11 +26,26 @@ public class AccountService {
         this.customerRepository = customerRepository;
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    public List<AccountResponse> getAllAccounts() {
+        return accountRepository.findAll()
+                .stream()
+                .map(account -> new AccountResponse(
+                        account.getId(),
+                        account.getAccountNumber(),
+                        account.getBalance(),
+                        new CustomerResponse(
+                                account.getCustomer().getId(),
+                                account.getCustomer().getFirstName(),
+                                account.getCustomer().getLastName(),
+                                account.getCustomer().getEmail()
+                        )
+                ))
+                .toList();
     }
 
-    public Account createAccount(CreateAccountRequest request) {
+    public AccountResponse createAccount(CreateAccountRequest request) {
+        String accountNumber = generateUniqueAccountNumber();
+
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() ->
                         new IllegalArgumentException(
@@ -35,10 +53,34 @@ public class AccountService {
                         ));
 
         Account account = new Account(
-                request.getAccountNumber(),
+                accountNumber,
                 request.getBalance(),
                 customer
         );
-        return accountRepository.save(account);
+
+        Account savedAccount = accountRepository.save(account);
+
+        return new AccountResponse(
+                savedAccount.getId(),
+                savedAccount.getAccountNumber(),
+                savedAccount.getBalance(),
+                new CustomerResponse(
+                        customer.getId(),
+                        customer.getFirstName(),
+                        customer.getLastName(),
+                        customer.getEmail()
+                )
+        );
+    }
+
+    private String generateUniqueAccountNumber() {
+        String accountNumber;
+
+        do {
+            long number = ThreadLocalRandom.current().nextLong(1000000000L, 9999999999L);
+            accountNumber = String.valueOf(number);
+        } while (accountRepository.findByAccountNumber(accountNumber).isPresent());
+
+        return accountNumber;
     }
 }

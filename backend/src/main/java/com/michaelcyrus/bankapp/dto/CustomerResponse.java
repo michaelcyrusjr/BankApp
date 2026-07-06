@@ -1,29 +1,28 @@
 package com.michaelcyrus.bankapp.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 /**
  * @author Michael Cyrus Jr
  **/
-public class CreateCustomerRequest {
+public class CustomerResponse {
 
-    @NotBlank
+    private Long id;
     private String firstName;
-
-    @NotBlank
     private String lastName;
-
-    @NotBlank
-    @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 8)
-    private String password;
+    public CustomerResponse(Long id, String firstName, String lastName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
-    public CreateCustomerRequest() {
+    public Long getId() {
+            return id;
+        }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -49,13 +48,4 @@ public class CreateCustomerRequest {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }

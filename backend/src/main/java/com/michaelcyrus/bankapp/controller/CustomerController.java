@@ -1,8 +1,9 @@
 package com.michaelcyrus.bankapp.controller;
 
 import com.michaelcyrus.bankapp.dto.CreateCustomerRequest;
-import com.michaelcyrus.bankapp.entity.Customer;
+import com.michaelcyrus.bankapp.dto.CustomerResponse;
 import com.michaelcyrus.bankapp.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +22,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
+    public List<CustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody CreateCustomerRequest request) {
+    public CustomerResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         return customerService.createCustomer(request);
     }
 
