@@ -4,9 +4,12 @@ import com.michaelcyrus.bankapp.dto.CreateCustomerRequest;
 import com.michaelcyrus.bankapp.dto.CustomerResponse;
 import com.michaelcyrus.bankapp.entity.Customer;
 import com.michaelcyrus.bankapp.exception.DuplicateEmailException;
+import com.michaelcyrus.bankapp.exception.InvalidCredentialsException;
 import com.michaelcyrus.bankapp.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.michaelcyrus.bankapp.dto.AuthResponse;
+import com.michaelcyrus.bankapp.dto.LoginRequest;
 
 import java.util.List;
 
@@ -60,6 +63,29 @@ public class CustomerService {
                 savedCustomer.getLastName(),
                 savedCustomer.getEmail()
         );
+    }
+
+    public AuthResponse login(LoginRequest request) {
+        Customer customer = customerRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+
+        boolean passwordMatches = passwordEncoder.matches(
+                request.getPassword(),
+                customer.getPasswordHash()
+        );
+
+        if (!passwordMatches) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        CustomerResponse customerResponse = new CustomerResponse(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail()
+        );
+
+        return new AuthResponse("login-success", customerResponse);
     }
 
 }

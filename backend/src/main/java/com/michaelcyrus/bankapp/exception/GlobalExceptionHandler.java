@@ -50,4 +50,18 @@ public class GlobalExceptionHandler {
                         "message", message
                 ));
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCredentialsException(
+            InvalidCredentialsException exception
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "timestamp", OffsetDateTime.now().toString(),
+                        "status", HttpStatus.UNAUTHORIZED.value(),
+                        "error", "Unauthorized",
+                        "message", exception.getMessage()
+                ));
+    }
 }
