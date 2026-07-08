@@ -8,6 +8,7 @@ import com.michaelcyrus.bankapp.entity.Customer;
 import com.michaelcyrus.bankapp.repository.AccountRepository;
 import com.michaelcyrus.bankapp.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import com.michaelcyrus.bankapp.dto.UpdateAccountRequest;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,6 +41,27 @@ public class AccountService {
                                 account.getCustomer().getEmail()
                         )
                 ))
+                .toList();
+    }
+
+    public List<AccountResponse> getAccountsForCustomer(String email) {
+        return accountRepository.findByCustomerEmail(email)
+                .stream()
+                .map(account -> {
+                    Customer customer = account.getCustomer();
+
+                    return new AccountResponse(
+                            account.getId(),
+                            account.getAccountNumber(),
+                            account.getBalance(),
+                            new CustomerResponse(
+                                    customer.getId(),
+                                    customer.getFirstName(),
+                                    customer.getLastName(),
+                                    customer.getEmail()
+                            )
+                    );
+                })
                 .toList();
     }
 
@@ -83,4 +105,40 @@ public class AccountService {
 
         return accountNumber;
     }
+
+    public AccountResponse updateAccount(Long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Account not found with id: " + id)
+                );
+
+        account.setBalance(request.getBalance());
+
+        Account savedAccount = accountRepository.save(account);
+
+        Customer customer = savedAccount.getCustomer();
+
+        return new AccountResponse(
+                savedAccount.getId(),
+                savedAccount.getAccountNumber(),
+                savedAccount.getBalance(),
+                new CustomerResponse(
+                        customer.getId(),
+                        customer.getFirstName(),
+                        customer.getLastName(),
+                        customer.getEmail()
+                )
+        );
+    }
+
+    public void deleteAccount(Long id, String email) {
+        Account account = accountRepository.findByIdAndCustomerEmail(id, email)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Account not found with id: " + id)
+                );
+
+        accountRepository.delete(account);
+    }
+
+
 }
