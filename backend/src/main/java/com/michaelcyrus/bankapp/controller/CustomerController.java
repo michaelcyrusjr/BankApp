@@ -21,11 +21,13 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    // Get all customers
     @GetMapping
     public List<CustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
+    // Create a nw customer
     @PostMapping
     public CustomerResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         return customerService.createCustomer(request);

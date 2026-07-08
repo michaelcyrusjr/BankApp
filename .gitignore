@@ -1,0 +1,16 @@
+# Environment variables
+.env
+
+# IntelliJ
+.idea/shelf/
+.idea/workspace.xml
+.idea/httpRequests/
+.idea/queries/
+.idea/dataSources/
+.idea/dataSources.local.xml
+
+# Build outputs
+backend/target/
+frontend/node_modules/
+frontend/build/
+frontend/dist/

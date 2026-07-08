@@ -14,6 +14,7 @@ public class PasswordConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // returns a BCrypt hashed password
         return new BCryptPasswordEncoder();
     }
 }

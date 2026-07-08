@@ -21,11 +21,17 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
 
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerService(
+            CustomerRepository customerRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService
+    ) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public List<CustomerResponse> getAllCustomers() {
@@ -85,7 +91,9 @@ public class CustomerService {
                 customer.getEmail()
         );
 
-        return new AuthResponse("login-success", customerResponse);
+        String token = jwtService.generateToken(customer.getEmail());
+
+        return new AuthResponse(token, customerResponse);
     }
 
 }
