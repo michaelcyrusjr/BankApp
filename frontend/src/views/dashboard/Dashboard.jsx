@@ -18,6 +18,9 @@ import {
   cilCreditCard,
   cilArrowTop,
   cilArrowBottom,
+  cilWallet,
+  cilAirplaneMode,
+  cilHome,
 } from '@coreui/icons'
 
 import SummaryCard from '../../components/SummaryCard'
@@ -25,6 +28,7 @@ import AccountRow from '../../components/AccountRow'
 import TransactionRow from '../../components/TransactionRow'
 import { useEffect, useState } from 'react'
 import { getAccounts } from '../../api/accountsApi'
+import AccountCard from '../../components/AccountCard'
 
 const Dashboard = () => {
   const [accounts, setAccounts] = useState([])
@@ -94,6 +98,56 @@ const Dashboard = () => {
     { name: 'Groceries', date: 'May 21, 2026', amount: '-$86.44' },
   ]
 
+  const mockAccounts = [
+    {
+      id: 1,
+      name: 'Checking Account',
+      accountNumber: '1234567890',
+      balance: '$12,540.00',
+      balanceLabel: 'Available',
+      icon: cilCreditCard,
+      color: 'success',
+    },
+    {
+      id: 2,
+      name: 'Savings Account',
+      accountNumber: '9876543210',
+      balance: '$10,250.00',
+      balanceLabel: 'Available',
+      icon: cilDollar,
+      color: 'primary',
+    },
+    {
+      id: 3,
+      name: 'Emergency Fund',
+      accountNumber: '4567891230',
+      balance: '$8,750.00',
+      balanceLabel: 'Reserved',
+      icon: cilWallet,
+      color: 'warning',
+    },
+    {
+      id: 4,
+      name: 'Travel Fund',
+      accountNumber: '7891234560',
+      balance: '$2,300.00',
+      balanceLabel: 'Available',
+      icon: cilAirplaneMode,
+      color: 'info',
+    },
+    {
+      id: 5,
+      name: 'Bills Account',
+      accountNumber: '3216549870',
+      balance: '$925.50',
+      balanceLabel: 'Upcoming',
+      icon: cilHome,
+      color: 'danger',
+    },
+  ]
+
+  const displayedAccounts = accounts.length > 0 ? accounts : mockAccounts
+
   const quickActions = [
     {
       label: 'Transfer Money',
@@ -127,21 +181,22 @@ const Dashboard = () => {
       </CRow>
 
       <CRow className="g-4 mb-4">
-        {summaryCard.map((card) => (
-          <CCol xs={12} sm={6} md={3} key={card.title}>
+        <div className="summary-card-grid">
+          {summaryCard.map((card) => (
             <SummaryCard
+              key={card.title}
               title={card.title}
               value={card.value}
               icon={card.icon}
               color={card.color}
               subtitle={card.subtitle}
             />
-          </CCol>
-        ))}
+          ))}
+        </div>
       </CRow>
 
       <CRow className="g-4">
-        <CCol lg={6}>
+        <CCol xl={6}>
           <CCard className="dashboard-list-card">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong>Accounts Overview</strong>
@@ -152,31 +207,23 @@ const Dashboard = () => {
 
             <CCardBody>
               <div className="accountsrow-grid">
-                {accounts.map((account) => (
-                  <CButton
+                {displayedAccounts.map((account) => (
+                  <AccountCard
                     key={account.id}
-                    color="dark"
-                    variant="outline"
-                    className="accountsrow-button"
-                  >
-                    <span className={`accountsrow-icon text-${account.color || 'primary'}`}>
-                      <CIcon icon={account.icon || cilCreditCard} size="lg" />
-                    </span>
-
-                    <span className="accountsrow-info">
-                      <span className="accountsrow-label">Account</span>
-                      <span className="accountsrow-number">{account.accountNumber}</span>
-                    </span>
-
-                    <span className="accountsrow-balance">{account.balance}</span>
-                  </CButton>
+                    accountName={account.name || 'Account'}
+                    accountNumber={account.accountNumber}
+                    balance={account.balance}
+                    balanceLabel={account.balanceLabel}
+                    icon={account.icon}
+                    color={account.color || 'primary'}
+                  />
                 ))}
               </div>
             </CCardBody>
           </CCard>
         </CCol>
 
-        <CCol lg={6}>
+        <CCol xl={6}>
           <CCard className="dashboard-list-card">
             <CCardHeader className="d-flex justify-content-between align-items-center">
               <strong>Recent Transactions</strong>
