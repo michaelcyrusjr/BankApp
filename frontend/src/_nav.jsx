@@ -93,6 +93,24 @@ const _nav = [
     icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
   },
   {
+    component: CNavItem,
+    name: 'Transfers',
+    to: '/transfers',
+    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Transactions',
+    to: '/accounts',
+    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Settings',
+    to: '/accounts',
+    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
+  },
+  {
     component: CNavTitle,
     name: 'Theme',
   },

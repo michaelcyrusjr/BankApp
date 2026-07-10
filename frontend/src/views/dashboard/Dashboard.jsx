@@ -16,6 +16,8 @@ import {
   cilCloudUpload,
   cilDescription,
   cilCreditCard,
+  cilArrowTop,
+  cilArrowBottom,
 } from '@coreui/icons'
 
 import SummaryCard from '../../components/SummaryCard'
@@ -57,28 +59,32 @@ const Dashboard = () => {
 
   const summaryCard = [
     {
-      label: 'Total Balance',
-      icon: cilSwapHorizontal,
+      title: 'Total Balance',
+      icon: cilDollar,
       color: 'success',
       value: totalBalance,
+      subtitle: '+ 2.45% from last month',
     },
     {
-      label: 'Total Accounts',
-      icon: cilDollar,
-      color: 'info',
-      value: totalAccounts,
-    },
-    {
-      label: 'Total Income',
-      icon: cilCloudUpload,
+      title: 'Total Accounts',
+      icon: cilCreditCard,
       color: 'primary',
-      value: totalIncome,
+      value: totalAccounts,
+      subtitle: 'Total Accounts',
     },
     {
-      label: 'Total Expenses',
-      icon: cilDescription,
-      color: 'warning',
+      title: 'Total Income',
+      icon: cilArrowBottom,
+      color: 'success',
+      value: totalIncome,
+      subtitle: 'This Month',
+    },
+    {
+      title: 'Total Expenses',
+      icon: cilArrowTop,
+      color: 'danger',
       value: totalExpenses,
+      subtitle: 'This Month',
     },
   ]
 
@@ -122,12 +128,13 @@ const Dashboard = () => {
 
       <CRow className="g-4 mb-4">
         {summaryCard.map((card) => (
-          <CCol xs={12} sm={6} md={3} key={card.label}>
+          <CCol xs={12} sm={6} md={3} key={card.title}>
             <SummaryCard
-              title={card.label}
+              title={card.title}
               value={card.value}
               icon={card.icon}
               color={card.color}
+              subtitle={card.subtitle}
             />
           </CCol>
         ))}
